@@ -17,13 +17,14 @@ public class JDBCSelectDemo {
 
         Connection conn = null;
         Statement stmt = null;
+        ResultSet rs = null;
 
         try {
             Class.forName(driver);
             conn = DriverManager.getConnection(url,user,password);
             stmt = conn.createStatement();
             String sql = "select * from goods";
-            ResultSet rs = stmt.executeQuery(sql);
+            rs = stmt.executeQuery(sql);
             while (rs.next()){
                String id = rs.getString("id");
                String name = rs.getString("name");
@@ -35,6 +36,13 @@ public class JDBCSelectDemo {
         }catch (ClassNotFoundException e){
             e.printStackTrace();
         }finally {
+            if (rs != null){
+                try {
+                    rs.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
             if (stmt != null){
                 try {
                     stmt.close();
